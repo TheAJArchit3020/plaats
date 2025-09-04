@@ -1,4 +1,4 @@
-package com.plaatsapp
+package com.plaatsbeschrijvingen
 
 import android.app.Application
 import com.facebook.react.PackageList

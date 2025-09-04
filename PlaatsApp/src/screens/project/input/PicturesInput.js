@@ -9,12 +9,14 @@ import {
 } from 'react-native';
 
 import EditPicture from '../../../components/camera/EditPicture';
-import {Camera, pictureLocation} from '../../../components/camera/Camera';
+import Camera from '../../../components/camera/Camera';
+
+import {pictureLocation} from '../../../components/camera/Camera';
 
 import AsyncStore from '../../../services/storage/AsyncStore';
 import API from '../../../services/network/api';
 import Icon from 'react-native-vector-icons/AntDesign';
-import FastImage from 'react-native-fast-image';
+import FastImage from '@d11/react-native-fast-image';
 import Toast from 'react-native-toast-message';
 
 const PicturesInput = ({projectObj, changesObj, modelItem, projectID}) => {
@@ -34,7 +36,7 @@ const PicturesInput = ({projectObj, changesObj, modelItem, projectID}) => {
     if (!token) {
       return;
     }
-    const getLocations = async (pics) => {
+    const getLocations = async pics => {
       const locations = [];
       for (const pic of pics) {
         locations.push(await API.imageTryLocal(pic, projectID, token));
@@ -51,20 +53,21 @@ const PicturesInput = ({projectObj, changesObj, modelItem, projectID}) => {
     setPictures(pics);
   }, [projectObj, modelItem, token]);
 
-  const viewPicture = (index) => {
+  const viewPicture = index => {
     setIndex(index);
     setViewing(true);
   };
 
-  const updatePictures = (pics) => {
+  const updatePictures = pics => {
     changesObj[modelItem.name] = pics;
     projectObj[modelItem.name] = pics;
     setPictures(pics);
   };
 
-  const addImageToBeUploaded = (pic) => {
-    return AsyncStore.addImageToBeUploaded(pic, projectID)
-      .catch(() => Toast.show({'type': 'error', 'text1': 'Er ging iets mis met de foto'}))
+  const addImageToBeUploaded = pic => {
+    return AsyncStore.addImageToBeUploaded(pic, projectID).catch(() =>
+      Toast.show({type: 'error', text1: 'Er ging iets mis met de foto'}),
+    );
   };
 
   const replacePicture = (index, pic) => {
@@ -79,14 +82,14 @@ const PicturesInput = ({projectObj, changesObj, modelItem, projectID}) => {
     addImageToBeUploaded(pic);
   };
 
-  const addPicture = async (img) => {
+  const addPicture = async img => {
     await addImageToBeUploaded(img);
     updatePictures([...pictures, img]);
     const newLocation = {uri: `file://${pictureLocation(projectID, img)}`};
     setPictureLocations([...pictureLocations, newLocation]);
   };
 
-  const removePicture = (index) => {
+  const removePicture = index => {
     const newPictures = [...pictures];
     newPictures.splice(index, 1);
     updatePictures(newPictures);
@@ -112,7 +115,7 @@ const PicturesInput = ({projectObj, changesObj, modelItem, projectID}) => {
         <EditPicture
           picture={pictureLocations[index]}
           projectID={projectID}
-          onSave={(pic) => {
+          onSave={pic => {
             replacePicture(index, pic);
             setEditing(false);
           }}

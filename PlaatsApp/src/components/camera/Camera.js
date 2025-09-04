@@ -15,7 +15,7 @@ import {
   Camera as VisionCamera,
   useCameraDevice,
 } from 'react-native-vision-camera';
-import CameraRoll from '@react-native-camera-roll/camera-roll';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 
 const pictureLocation = (projectID, pictureID) => {
   return `${RNFS.DocumentDirectoryPath}/pictures/${projectID}/${pictureID}`;
@@ -156,4 +156,5 @@ const styles = StyleSheet.create({
   close: {},
 });
 
-export {Camera, pictureLocation};
+export default Camera;
+export {pictureLocation};

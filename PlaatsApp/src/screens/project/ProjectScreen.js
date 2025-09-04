@@ -15,7 +15,7 @@ const Drawer = createDrawerNavigator();
 const SAVE_INTERVAL = 60000;
 const TIME_SPENT_SAVE_INTERVAL = 30000;
 
-const CustomDrawerContent = (props) => {
+const CustomDrawerContent = props => {
   const ref = useRef(null);
   return (
     <ScrollView ref={ref} {...props} style={{paddingTop: 0, marginTop: 0}}>
@@ -39,13 +39,13 @@ const ProjectScreen = ({route, navigation}) => {
   const dimensions = useWindowDimensions();
   const projectID = route.params.id;
 
-  useEffect(() => {
-    const func = (s) => setAppState(s);
-    AppState.addEventListener('change', func);
-    return () => {
-      AppState.removeEventListener('change', func);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const func = (s) => setAppState(s);
+  //   AppState.addEventListener('change', func);
+  //   return () => {
+  //     AppState.removeEventListener('change', func);
+  //   };
+  // }, []);
 
   const addTimeSpent = useCallback(() => {
     if (appState === 'active' && changes) {
@@ -66,7 +66,7 @@ const ProjectScreen = ({route, navigation}) => {
     }
 
     // The addListener returns an unsubscribe method, and we return this to the react which calls it at cleanup
-    return navigation.addListener('beforeRemove', (e) => {
+    return navigation.addListener('beforeRemove', e => {
       // Store the project one last time when exiting
       storeProject();
 
@@ -82,7 +82,7 @@ const ProjectScreen = ({route, navigation}) => {
   useEffect(() => {
     if (route.params.newProject) {
       AsyncStore.getEmptyProject()
-        .then((emptyProject) => {
+        .then(emptyProject => {
           setProject(emptyProject);
           setChanges(emptyProject);
         })
@@ -94,7 +94,7 @@ const ProjectScreen = ({route, navigation}) => {
     }
 
     DiskStore.readProject(projectID)
-      .then((projectFromDisk) => {
+      .then(projectFromDisk => {
         setProject(projectFromDisk);
       })
       .catch(() => {
@@ -109,7 +109,7 @@ const ProjectScreen = ({route, navigation}) => {
       });
 
     DiskStore.readProjectChanges(projectID)
-      .then((changesFromDisk) => {
+      .then(changesFromDisk => {
         setChanges(changesFromDisk);
       })
       .catch(() => {
@@ -145,14 +145,14 @@ const ProjectScreen = ({route, navigation}) => {
         marginTop: -30,
       }}
       drawerType={dimensions.width >= 768 ? 'permanent' : 'front'}
-      drawerContent={(props) => (
+      drawerContent={props => (
         <CustomDrawerContent {...props} project={project} changes={changes} />
       )}>
       <Drawer.Screen
         name="Input"
         // drawerItems have the exact right parameters for the ContentScreen/InputScreen
         initialParams={makeDrawerItem('Object', project, changes)}>
-        {(props) => (
+        {props => (
           <ContentScreen
             {...props}
             projectID={projectID}

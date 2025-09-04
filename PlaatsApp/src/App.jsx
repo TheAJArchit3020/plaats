@@ -12,8 +12,9 @@ import ProjectScreen from './screens/project/ProjectScreen';
 import migrate from './services/migrations';
 
 const Stack = createStackNavigator();
-
-export function App() {
+import AntDesign from 'react-native-vector-icons/AntDesign';
+AntDesign.loadFont();
+function App() {
   migrate();
 
   const [state, dispatch] = React.useReducer(
@@ -103,7 +104,7 @@ export function App() {
             screenOptions={{
               headerShown: false,
             }}>
-            {state.userToken == null ? (
+            {/* {state.userToken == null ? (
               <Stack.Screen
                 name="SignIn"
                 component={LoginScreen}
@@ -112,14 +113,30 @@ export function App() {
                   animationTypeForReplace: state.isSignout ? 'pop' : 'push',
                 }}
               />
-            ) : (
-              <Stack.Screen name="Home" component={HomeScreen} />
-            )}
-            <Stack.Screen name="Project" component={ProjectScreen} navigation={Stack} />
+            ) : ( */}
+            <Stack.Screen name="Home" component={HomeScreen} />
+            {/* )} */}
+            <Stack.Screen
+              name="Project"
+              component={ProjectScreen}
+              navigation={Stack}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </AuthContext.Provider>
-      <Toast ref={(ref) => Toast.setRef(ref)} />
+      <Toast />
     </>
   );
 }
+
+// function App() {
+//   return (
+//     <>
+//       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+//         <Text>Welcome to PlaatsApp</Text>
+//       </View>
+//     </>
+//   );
+// }
+
+export default App;
